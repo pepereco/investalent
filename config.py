@@ -4,7 +4,7 @@ class Config:
     SECRET_KEY='superyoyO1525'
 
 class DevelopmentConfig(Config):
-    DEBUG = True
+    DEBUG = False
     SQLALCHEMY_DATABASE_URI = 'mysql://root:superyoyO1525@localhost/investalent2'
     SQLALCHEMY_TRACK_MODIFICATIONS= False
 

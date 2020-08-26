@@ -1,0 +1,14 @@
+{%extends 'layout.html'%}
+
+{%block container%}
+<div class="col-md-12 col-md-offset-1">
+  <h3>Applicants selection</h3>
+<div class="list-group">
+  {%for applicant in list_applicants%}
+    <a href="#" class="list-group-item list-group-item-action"> {{applicant.profile.name}} {{applicant.profile.last_name}}</a>
+  {%endfor%}
+</div>
+
+
+</div>
+{%endblock%}
