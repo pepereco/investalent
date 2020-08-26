@@ -1,0 +1,69 @@
+{%extends 'layout.html'%}
+{%from 'helpers/_forms.html' import render_field%}
+{%block container%}
+<div class="col-md-12 col-md-offset-1">
+  <h3>Edit task</h3>
+  <form class=""  method="post">
+
+    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+
+    <div class="form-group">
+      {{render_field(form.title,class='form-control',placeholder='Task name')}}
+    </div>
+
+    <div class="form-group">
+      {{render_field(form.description,class='form-control',placeholder='Description')}}
+    </div>
+
+    <div class="form-group">
+      {{render_field(form.objectives,class='form-control',placeholder='Objectives')}}
+    </div>
+
+    <div class="form-group">
+      {{render_field(form.hability_1, class='form-control',placeholder='First hability')}}
+    </div>
+
+    <div class="form-group">
+      {{render_field(form.hability_2,class='form-control',placeholder='Second hability')}}
+    </div>
+
+    <div class="form-group">
+      {{render_field(form.months,class='form-control',placeholder='Months')}}
+    </div>
+    <div class="form-group">
+      {{render_field(form.days,class='form-control',placeholder='Days')}}
+    </div>
+
+    <div class="form-group">
+      {{render_field(form.recomend_user,class='form-control',placeholder='Username')}}
+    </div>
+
+    <div class="form-group">
+      {{render_field(form.commitment,class='form-control',placeholder='Commitment')}}
+    </div>
+
+    <div class="form-group">
+
+      {{render_field(form.work,class='form-control',placeholder='%' )}}
+
+      <div class="alert alert-warning" role="alert">
+        This percentage corresponds to the contribution of the milestone in the objectives of the phase.
+        {%if show_phase=='1'%}
+          The maximum left is: <li class="alert alert-warning" role="alert">% left: {{project.current_percent_F1}}%</li>
+        {%elif show_phase=='2'%}
+          The maximum left is: <li class="alert alert-warning" role="alert">% left: {{project.current_percent_F2}}%</li>
+        {%elif show_phase=='3'%}
+          The maximum left is: <li class="alert alert-warning" role="alert">% left: {{project.current_percent_F3}}%</li>
+        {%endif%}
+      </div>
+
+      <a href="{{url_for('.show_project', project_id=project.id)}}" target="_blank">See objectives</a>
+    </div>
+
+    <button type="submit" class="btn btn-primary"  name="button">
+      Done
+    </button>
+  </form>
+
+</div>
+{%endblock%}

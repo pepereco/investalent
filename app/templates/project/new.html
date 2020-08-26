@@ -1,0 +1,96 @@
+{%extends 'layout.html'%}
+{%from 'helpers/_forms.html' import render_field%}
+
+{%block container%}
+<div class="">
+
+  <a href="{{url_for('.get_idea', idea_id=idea.id, type='0')}}">See idea</a>
+
+</div>
+<div class="col-md-12 col-md-offset-1">
+  <h3>Create project</h3>
+
+  <form class=""  method="post">
+
+    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+
+    <div class="form-group">
+      {{render_field(form.title,class='form-control',placeholder='Project Name')}}
+    </div>
+
+    <div class="form-group">
+      {{render_field(form.atractive_description, class='form-control',placeholder='Atractive description')}}
+    </div>
+
+    <div class="form-group">
+      {{render_field(form.description,class='form-control',placeholder='Full description')}}
+    </div>
+
+    <div class="form-group">
+      {{render_field(form.num_fases,class='form-control',placeholder='Duration of the project')}}
+    </div>
+
+    <div class="form-group">
+      {{render_field(form.hide,class='form-control',placeholder='Privacity')}}
+    </div>
+
+    <div class="form-group">
+      {{render_field(form.recomend_project_manager,class='form-control',placeholder='Send to project manager')}}
+      {%if form.recomend_project_manager.data!=''%}
+      <td>
+        <a href="{{url_for('.show_profile', username=form.recomend_project_manager.data, contract_id=0)}}">See creator profile</a>
+      </td>
+      {%endif%}
+    </div>
+
+    <div class="form-group">
+      {{render_field(form.ceo_key,class='form-control',placeholder='Optional key')}}
+    </div>
+
+    {%if show_fases==False%}
+    <button type="submit" class="btn btn-primary"  name="button">
+      Next
+    </button>
+    {%endif%}
+    {%if show_fases==True%}
+
+      {%if form.num_fases.data=='1' or form.num_fases.data=='2' or form.num_fases.data=='3'%}
+        <div class="form-group">
+          {{render_field(form.gen_obj_F1,class='form-control',placeholder='Objectives fase 1:')}}
+        </div>
+
+        <div class="form-group">
+          {{render_field(form.percent_F1,class='form-control',placeholder='Percent fase 1:')}}
+        </div>
+      {%endif%}
+
+      {%if form.num_fases.data=='2' or form.num_fases.data=='3'%}
+        <div class="form-group">
+          {{render_field(form.gen_obj_F2,class='form-control',placeholder='Objectives fase 2:')}}
+        </div>
+
+        <div class="form-group">
+          {{render_field(form.percent_F2,class='form-control',placeholder='Percent fase 2:')}}
+        </div>
+      {%endif%}
+      {%if form.num_fases.data=='3'%}
+        <div class="form-group">
+          {{render_field(form.gen_obj_F3,class='form-control',placeholder='Objectives fase 3:')}}
+        </div>
+        <div class="form-group">
+          {{render_field(form.percent_F3,class='form-control',placeholder='Percent fase 3:')}}
+        </div>
+      {%endif%}
+
+      {%if show_fases==True%}
+      <button type="submit" class="btn btn-primary"  name="button">
+        Create project
+      </button>
+      {%endif%}
+
+    {%endif%}
+
+  </form>
+
+</div>
+{%endblock%}

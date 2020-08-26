@@ -1,0 +1,29 @@
+{%extends 'layout.html'%}
+
+{%block container%}
+<div class="w-100 p-3" style="background-color: #eee;"
+<div class="card">
+  <div class="card-body">
+      <h5 class="card-title">Name: {{profile.name}}</h5>
+      <p class="card-text">Last name: {{profile.last_name}}</p>
+      <p class="card-text">Telephone : {{profile.telephone}}</p>
+  </div>
+  {%if (user.user_type== 4 or user.user_type== 5) and current_user.user_type==3%}
+  <div class="text-center">
+    <div class="btn-group" role="group" aria-label="Basic example">
+      <button type="button" class="btn btn-secondary"><a class="text-light" href="{{url_for('.select_project_manager', selection='accepted', user_id= profile.user_id)}}">Accept</a></button>
+      <button type="button" class="btn btn-secondary"><a class="text-light" href="{{url_for('.select_project_manager', selection='declined', user_id= profile.user_id)}}">Decline</a></button>
+    </div>
+  </div>
+  {%elif current_user.user_type==1 or current_user.user_type==2%}
+  <div class="btn-group" role="group" aria-label="Basic example">
+    <button type="button" class="btn btn-primary"><a class="text-light" href="{{url_for('.select_applier', selection='accepted', contract_id= contract_id)}}">Accept</a></button>
+    <button type="button" class="btn btn-secondary"><a class="text-light" href="{{url_for('.select_applier', selection='declined', contract_id= contract_id)}}">Decline</a></button>
+  </div>
+  {%endif%}
+</div>
+
+
+
+</div>
+{%endblock%}

@@ -1,0 +1,64 @@
+{%extends 'layout.html'%}
+{%from 'helpers/_forms.html' import render_field%}
+
+{%block container%}
+
+<div class="col-md-12 col-md-offset-1">
+  <h3>Ideas</h3>
+
+  <form class=""  method="post">
+
+    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+
+    <div class="form-group">
+
+      {{render_field(form.type,class='form-control',placeholder='Type')}}
+
+    </div>
+
+    <button type="submit" class="btn btn-primary"  name="button">
+      Find
+    </button>
+  </form>
+
+</div>
+{%if type_form!='0'%}
+  {%if ideas!=[]%}
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">Problem</th>
+          <th scope="col">Solution</th>
+          <th scope="col">Extra info</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {%for idea in ideas%}
+        <tr>
+          <td>
+            <a href="{{url_for('.get_idea', idea_id=idea.id, type=type_form)}}">See idea</a>
+          </td>
+          <td>{{idea.little_problem}}</td>
+          <td>{{idea.little_solution}}</td>
+          <td>{{idea.little_extra_info}}</td>
+          <td>
+            {%if type_form=='2' or type_form=='1'%}
+            <a href="{{url_for('.decline_idea',idea_id=idea.id, type=type_form)}}" class="btn btn-danger">Decline</a>
+            {%endif%}
+            {%if type_form=='3' or type_form=='1'%}
+            <a href="{{url_for('.accept_idea', idea_id=idea.id, type=type_form)}}"class="btn btn-primary">Accept</a>
+            {%endif%}
+            {%if type_form=='2'%}
+            <a href="{{url_for('.new_project', idea_id= idea.id)}}" class="btn btn-primary">Create project</a>
+            {%endif%}
+          </td>
+        </tr>
+        {%endfor%}
+      </tbody>
+    </table>
+  {%endif%}
+{%endif%}
+
+{%endblock%}

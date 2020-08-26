@@ -1,0 +1,28 @@
+{%extends 'layout.html'%}
+
+{%block container%}
+  <h2>Hola desde el index</h2>
+  <div class="text-center">
+    <div class="btn-group" role="group" aria-label="Basic example">
+      {%if current_user.is_authenticated%}
+        {%if current_user.user_type==0 or current_user.user_type==4 or current_user.user_type==5 %}
+          <div class="">
+            <a href="{{url_for('.create_project_manager')}}"> Be project Manager</a>
+          </div>
+        {% endif %}
+        {%if current_user.user_type==2%}
+          <div class="">
+            <a href="{{url_for('.return_to_developer')}}"> Be developer</a>
+          </div>
+        {% endif %}
+        {%if current_user.user_type!=3%}
+          <div class="">
+            <a href="{{url_for('.create_admin')}}">Admin </a>
+          </div>
+        {% endif %}
+      {% endif %}
+  </div>
+  </div>
+
+
+{%endblock%}

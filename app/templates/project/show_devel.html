@@ -1,0 +1,86 @@
+{%extends 'layout.html'%}
+
+{%block container%}
+
+<div class="w-100 p-3" style="background-color: #eee;"
+  <div class="card" >
+    <div class="mb-5 bg-white">
+    <div class="">
+      <span class="badge badge-warning">COMERCIAL SECRET</span>
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">{{project.title}}</h5>
+      <p class="card-text">CEO :{{profile_ceo.name}} {{profile_ceo.last_name}}</p>
+      <p class="card-text">Project manager :{{proj_manager.profile.name}} {{proj_manager.profile.last_name}}
+
+      </p>
+
+      <div class="">
+        <a href="" data-toggle="modal" data-target="#exampleModal"><p class="btn btn-primary" >Contact</p></a>
+      </div>
+
+      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Project manager contact</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              email : {{proj_manager.email}}
+              telephone : {{proj_manager.telephone}}
+            </div>
+            <div class="modal-footer">
+
+            </div>
+          </div>
+      </div>
+  </div>
+
+      <p class="card-text">Atractive description:{{project.atractive_description}}</p>
+      <p class="card-text">Description:{{project.description}}</p>
+      <p class="card-text">Current phase:
+        {%if project.current_fase==0%}
+          <td>Not started</td>
+        {%endif%}
+        {%if project.current_fase==1%}
+          <td>1st phase</td>
+        {%endif%}
+        {%if project.current_fase==2%}
+          <td>2nd phase</td>
+        {%endif%}
+        {%if project.current_fase==3%}
+          <td>3th phase</td>
+        {%endif%}
+      </p>
+    </div>
+
+      {%if project.num_fases==1 or project.num_fases==2 or project.num_fases==3%}
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Objectives phase 1:<pre>{{project.gen_obj_F1}}</pre></li>
+      </ul>
+
+      {%endif%}
+
+
+      {%if project.num_fases==2 or project.num_fases==3%}
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Objectives phase 2:<pre>{{project.gen_obj_F2}}</pre></li>
+      </ul>
+      {%endif%}
+
+      {%if  project.num_fases==3 %}
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Objectives phase 3:<pre>{{project.gen_obj_F3}}</pre></li>
+      </ul>
+
+      {%endif%}
+
+      <div class=" bg-warning" style="width:150px">
+      </div>
+    </div>
+  </div>
+</div>
+{%endblock%}

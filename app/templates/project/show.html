@@ -1,0 +1,179 @@
+{%extends 'layout.html'%}
+{%from 'helpers/_forms.html' import render_field%}
+{%block container%}
+
+<div class="w-100 p-3" style="background-color: #eee;"
+  <div class="card" >
+    <div class="mb-5 bg-white">
+    <div class="">
+      <span class="badge badge-warning">COMERCIAL SECRET</span>
+    </div>
+    {%if project.manager_user_id==current_user.id and project.secured_key==0 and current_user.user_type!=3%}
+    <div class="text-right">
+      <a href="{{url_for('.intro_project_key', project_id= project.id)}}" class="btn btn-primary">Introduce project key</a>
+    </div>
+    {%endif%}
+    <div class="card-body">
+      <h5 class="card-title">{{project.title}}
+        {%if project.manager_user_id==current_user.id and project.secured_key==1 or current_user.user_type==3%}
+        <div class="text-right">
+          <a href="{{url_for('.edit_title_project', project_id= project.id)}}" class="btn btn-primary">Edit</a>
+        </div>
+        {%endif%}
+      </h5>
+      <p class="card-text">CEO :{{profile_ceo.name}} {{profile_ceo.last_name}}</p>
+
+      {%if current_user.user_type==3 and project.manager_user_id!=None%}
+        <p class="card-text">Project manager :{{profile_pm.name}} {{profile_pm.last_name}}</p>
+      {%endif%}
+      {%if current_user.user_type==3 and project.ceo_key!=''%}
+        <p class="card-text">Key :{{project.ceo_key}}</p>
+      {%endif%}
+      <p class="card-text">Atractive description:{{project.atractive_description}}
+        {%if project.manager_user_id==current_user.id and project.secured_key==1 or current_user.user_type==3%}
+        <div class="text-right">
+          <a href="{{url_for('.edit_atractive_description_project', project_id= project.id)}}" class="btn btn-primary">Edit</a>
+        </div>
+        {%endif%}
+      </p>
+      <p class="card-text">Description:{{project.description}}
+        {%if project.manager_user_id==current_user.id and project.secured_key==1 or current_user.user_type==3%}
+        <div class="text-right">
+          <a href="{{url_for('.edit_description_project', project_id= project.id)}}" class="btn btn-primary">Edit</a>
+        </div>
+        {%endif%}
+      </p>
+      <p class="card-text">Current phase:
+        {%if project.current_fase==0%}
+          <td>None</td>
+        {%endif%}
+        {%if project.current_fase==1%}
+          <td>1st phase</td>
+        {%endif%}
+        {%if project.current_fase==2%}
+          <td>2nd phase</td>
+        {%endif%}
+        {%if project.current_fase==3%}
+          <td>3th phase</td>
+        {%endif%}
+        <td> upon {{project.num_fases}} phases</td>
+      </p>
+
+
+      {%if current_user.user_type==3%}
+        <p class="card-text">Users actions: {{project.current_actions}}</p>
+        <p class="card-text">Our actions: {{project.our_percent}}</p>
+        <p class="card-text">Reserve: {{project.reserve}}</p>
+      {%endif%}
+      <!--
+    {%if (current_user.id==project.manager_user_id or current_user.id==project.idea_user_id or current_user.id==project.ceo_user_id)%}
+
+      <a href="{{url_for('.upload_presentation', project_id= project.id)}}" class="btn btn-primary">Upload Presentation</a>
+
+    {%endif%}
+    -->
+
+    </div>
+
+      {%if project.num_fases==1 or project.num_fases==2 or project.num_fases==3%}
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Objectives phase 1:<pre>{{project.gen_obj_F1}}</pre></li>
+        <li class="list-group-item">% phase 1: {{project.work_percent_F1}}%</li>
+      </ul>
+
+      {%endif%}
+
+
+      {%if project.num_fases==2 or project.num_fases==3%}
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Objectives phase 2:<pre>{{project.gen_obj_F2}}</pre></li>
+
+        <li class="list-group-item">% phase 2: {{project.work_percent_F2}}%</li>
+      </ul>
+      {%endif%}
+
+      {%if  project.num_fases==3 %}
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Objectives phase 3:<pre>{{project.gen_obj_F3}}</pre></li>
+        <li class="list-group-item">% phase 3: {{project.work_percent_F3}}%</li>
+      </ul>
+
+      {%endif%}
+
+      {%if (current_user.id==project.ceo_user_id or (project.secured_key==1 and current_user.id==project.manager_user_id ) or current_user.user_type==3) and project.edit_current_fase<= (project.num_fases-1) %}
+
+        <div class="text-right">
+            <a href="{{url_for('.edit_objectives_and_percent', project_id= project.id, project_edit_phase=project.edit_current_fase)}}" class="btn btn-primary">Edit phases</a>
+        </div>
+
+      {%endif%}
+      {%if project.manager_user_id==None and current_user.user_type!=3%}
+        {%if project.current_fase==0 %}
+          <a href="{{url_for('.start_my_project', project_id= project.id)}}" class="btn btn-primary">Be the project manager</a>
+        {%else%}
+          <a href="{{url_for('.start_my_project', project_id= project.id)}}" class="btn btn-primary">Be the new project manager</a>
+        {%endif%}
+      {%endif%}
+      <div class=" bg-warning" style="width:150px">
+      {%if project.manager_user_id==current_user.id and current_user.user_type != 3%}
+          <a href="{{url_for('.tasks_editor', project_id= project.id, show_phase=project.current_fase)}}" class="btn btn-primary">Manage milestones</a>
+      {%endif%}
+      </div>
+
+      <div class="btn-group" role="group" aria-label="Basic example">
+        <div class="text-left">
+          {%if current_user.user_type == 3%}
+            {%if project.hide==0 %}
+                <a href="{{url_for('.hide_project', project_id= project.id, hide=1)}}" class="btn btn-secondary">Hide the project</a>
+            {%else%}
+              <a href="{{url_for('.hide_project', project_id= project.id, hide=0)}}" class="btn btn-secondary">Make public</a>
+            {%endif%}
+          {%endif%}
+        </div>
+
+      <div class="">
+        <div class="text-center">
+        <a href="" data-toggle="modal" data-target="#recommendModal"><p class="btn btn-secondary" >Recommend project manager</p></a>
+        </div>
+      </div>
+        <div class="modal fade" id="recommendModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Send a gmail recommendation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>
+
+
+                  <form class=""  method="post">
+
+                    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+
+                    <div class="form-group">
+
+                      {{render_field(formRecom.recomend_user,class='form-control',placeholder='Username',autofocus=true, required=true)}}
+
+                    </div>
+
+                    <button type="submit" class="btn btn-primary"  name="button">
+                      Send
+                    </button>
+
+                  </form>
+                </p>
+
+              </div>
+              <div class="modal-footer">
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+{%endblock%}

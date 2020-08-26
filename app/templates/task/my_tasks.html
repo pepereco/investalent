@@ -1,0 +1,88 @@
+{%extends 'layout.html'%}
+{%from 'helpers/_forms.html' import render_field%}
+
+{%block container%}
+
+
+<div class="col-md-12 col-md-offset-1">
+  <h3>My Tasks</h3>
+
+  <form class=""  method="post">
+
+    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+
+    <div class="form-group">
+
+      {{render_field(form.SelectTaskPhase,class='form-control',placeholder='Task phase: ')}}
+
+    </div>
+
+    <button type="submit" class="btn btn-primary"  name="button">
+      Find
+    </button>
+  </form>
+
+</div>
+{%if tasks==[]%}
+
+    <div class="alert alert-light" role="alert">
+        No tasks found
+    </div>
+
+{%else%}
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col"></th>
+        <th scope="col">Title</th>
+        <th scope="col">Main hability</th>
+        <th scope="col">Percent</th>
+        <th scope ="col">Limit date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {%for task in tasks%}
+      <tr>
+        <td>
+
+            <div class="">
+              <a href="{{url_for('.show_task_developer', task_id=task.id)}}">Show</a>
+            </div>
+            <div class="">
+              <a href="" data-toggle="modal" data-target="#exampleModal"><p class="text-danger">Leave</p></a>
+            </div>
+
+
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Break the contract</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    Are you sure that you want to leave
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary"><a class="text-light" href="{{url_for('.leave_task', task_id=task.id)}}">Yes, leave</a></button>
+                    <button type="button" class="btn btn-primary"><a class="text-light" href="{{url_for('.my_tasks')}}">Cancel</a></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </td>
+        <td>{{task.title}}</td>
+        <td>{{habilities_dict[task.hability_1]}}</td>
+        <td>{{task.percent}}</td>
+        <td>{{task.teoric_finish.day}}/{{task.teoric_finish.month}}/{{task.teoric_finish.year}}</td>
+
+      </tr>
+      {%endfor%}
+    </tbody>
+  </table>
+{%endif%}
+
+
+{%endblock%}

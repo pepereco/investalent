@@ -1,0 +1,93 @@
+{%extends 'layout.html'%}
+{%from 'helpers/_forms.html' import render_field%}
+
+{%block container%}
+
+<div class="col-md-12 col-md-offset-1">
+  {%if admin == True%}
+    <h3>Projects</h3>
+  {%else%}
+    <h3>New Projects</h3>
+  {%endif%}
+  <form class=""  method="post">
+
+    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+
+    <div class="form-group">
+
+      {{render_field(form.state,class='form-control',placeholder='State of the project',autofocus=true, required=true)}}
+
+    </div>
+    {%if admin == True%}
+      <div class="form-group">
+
+        {{render_field(form.project_searcher,class='form-control',placeholder='Title',autofocus=true, required=false)}}
+
+      </div>
+    {%endif%}
+
+    <button type="submit" class="btn btn-primary"  name="button">
+      Find
+    </button>
+  </form>
+
+</div>
+{%if projects==[]%}
+
+    <div class="alert alert-light" role="alert">
+        No projects found
+    </div>
+
+{%else%}
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col"></th>
+        <th scope="col">Title</th>
+        <th scope="col">Description</th>
+        {%if admin == True%}
+          <th scope ="col">Teoric finish</th>
+        {%else%}
+          <th scope ="col">Duration</th>
+        {%endif%}
+
+      </tr>
+    </thead>
+    <tbody>
+      {%for project in projects%}
+          <tr>
+
+            <td>
+            <a href="{{url_for('.show_project', project_id=project.id)}}">See project</a>
+            </td>
+
+            <td>{{project.title}}</td>
+            <td>{{project.atractive_description}}</td>
+
+            {%if admin == True%}
+              {%if project.teoric_finish!=None%}
+                <td>{{project.teoric_finish.day}}/{{project.teoric_finish.month}}/{{project.teoric_finish.year}}</td>
+              {%else%}
+                <td>Not started</td>
+              {%endif%}
+            {%else%}
+              {%if project.num_fases==1%}
+                <td>3 months</td>
+              {%endif%}
+              {%if project.num_fases==2%}
+                <td>6 months</td>
+              {%endif%}
+              {%if project.num_fases==3%}
+                <td>9 months</td>
+              {%endif%}
+            {%endif%}
+
+
+          </tr>
+      {%endfor%}
+    </tbody>
+  </table>
+{%endif%}
+
+
+{%endblock%}

@@ -1,0 +1,97 @@
+{%extends 'layout.html'%}
+{%from 'helpers/_forms.html' import render_field%}
+{%block container%}
+<div class="col-md-12 col-md-offset-1">
+  <h3>Edit Objectives and Percent</h3>
+  <form class=""  method="post">
+
+    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+
+    {%if project.num_fases==3%}
+
+      {%if project_edit_phase<'1'%}
+
+        <div class="form-group">
+          {{render_field(form.gen_obj_F1 , class='form-control',placeholder='')}}
+        </div>
+        <div class="form-group">
+          {{render_field(form.work_percent_F1 , class='form-control',placeholder='')}}
+        </div>
+      {%endif%}
+      {%if project_edit_phase<'2'%}
+        <div class="form-group">
+          {{render_field(form.gen_obj_F2 , class='form-control',placeholder='')}}
+        </div>
+
+        <div class="form-group">
+          {{render_field(form.work_percent_F2 , class='form-control',placeholder='')}}
+        </div>
+      {%endif%}
+      {%if project_edit_phase<'3'%}
+        <div class="form-group">
+          {{render_field(form.gen_obj_F3 , class='form-control',placeholder='')}}
+        </div>
+        <div class="form-group">
+          {{render_field(form.work_percent_F3 , class='form-control',placeholder='')}}
+        </div>
+      {%endif%}
+
+
+    {%elif project.num_fases==2%}
+      {%if project_edit_phase<'1'%}
+
+        <div class="form-group">
+          {{render_field(form.gen_obj_F1 , class='form-control',placeholder='')}}
+        </div>
+        <div class="form-group">
+          {{render_field(form.work_percent_F1 , class='form-control',placeholder='')}}
+        </div>
+      {%endif%}
+      {%if project_edit_phase<'2'%}
+        <div class="form-group">
+          {{render_field(form.gen_obj_F2 , class='form-control',placeholder='')}}
+        </div>
+
+        <div class="form-group">
+          {{render_field(form.work_percent_F2 , class='form-control',placeholder='')}}
+        </div>
+      {%endif%}
+
+    {%elif project.num_fases==1%}
+      {%if project_edit_phase<'1'%}
+
+        <div class="form-group">
+          {{render_field(form.gen_obj_F1 , class='form-control',placeholder='')}}
+        </div>
+        <div class="form-group">
+          {{render_field(form.work_percent_F1 , class='form-control',placeholder='')}}
+        </div>
+      {%endif%}
+
+
+    {%endif%}
+    {%if project_edit_phase>='1'%}
+    <div class="">
+      <span class="badge badge-warning">Percent Phase 1: {{project.work_percent_F1}} %</span>
+    </div>
+
+    {%endif%}
+    {%if project_edit_phase>='2'%}
+    <div class="">
+      <span class="badge badge-warning">Percent Phase 2: {{project.work_percent_F2}} %</span>
+    </div>
+    {%endif%}
+    {%if project_edit_phase>='3'%}
+    <div class="">
+      <span class="badge badge-warning">Percent Phase 3: {{project.work_percent_F3}} %</span>
+    </div>
+    {%endif%}
+
+    <button type="submit" class="btn btn-primary"  name="button">
+      Edit
+    </button>
+
+  </form>
+
+</div>
+{%endblock%}

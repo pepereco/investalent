@@ -1,0 +1,121 @@
+{%extends 'bootstrap/base.html'%}
+
+
+{%block title%}
+  {{title}}
+{%endblock%}
+
+{%block navbar%}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+  <div class="container">
+    <a class ="navbar-brand" href="#"></a>
+    <div >
+
+      <ul class="navbar-nav ml-auto">
+        {%if title!='Index'%}
+        <li class ="nav-item" {%if active=='home'%}active {%endif%}>
+          <a class="nav-link" href="{{url_for('.index')}}">Home</a>
+        </li>
+        {%endif%}
+        {%if current_user.is_authenticated%}
+          <li class ="nav-item" {%if active=='logout'%}active {%endif%}>
+            <a class="nav-link" href="{{url_for('.logout')}}">LogOut</a>
+          </li>
+          <li class ="nav-item {%if active=='new_idea'%}active {%endif%}">
+            <a class="nav-link" href="{{url_for('.new_idea')}}">Create Project</a>
+          </li>
+          {%if current_user.profile==None%}
+          <li class ="nav-item {%if active=='new_profile'%}active {%endif%}">
+            <a class="nav-link" href="{{url_for('.new_profile', admin = '0')}}">Create profile</a>
+          </li>
+          {%else%}
+          <li class ="nav-item {%if active=='edit_profile'%}active {%endif%}">
+            <a class="nav-link" href="{{url_for('.edit_profile', profile_id=current_user.profile.id)}}">Profile</a>
+          </li>
+          {%endif%}
+          {%if current_user.user_type==0 or current_user.user_type==4 or current_user.user_type==5 or current_user.user_type==1 %}
+
+            <li class ="nav-item {%if active=='find_task'%}active {%endif%}">
+              <a class="nav-link" href="{{url_for('.find_task')}}">Find tasks</a>
+            </li>
+            <li class ="nav-item {%if active=='my_tasks'%}active {%endif%}">
+              <a class="nav-link" href="{{url_for('.my_tasks')}}">My tasks</a>
+            </li>
+
+          {%endif%}
+          {%if current_user.user_type==3%}
+          <li class ="nav-item {%if active=='list_ideas'%}active {%endif%}">
+            <a class="nav-link" href="{{url_for('.list_ideas', type='1', change='0')}}">Show ideas</a>
+          </li>
+          <li class ="nav-item {%if active=='list_potential_pm'%}active {%endif%}">
+            <a class="nav-link" href="{{url_for('.list_potential_pm')}}">Project manager selection</a>
+          </li>
+          <li class ="nav-item {%if active=='list_all_projects'%}active {%endif%}">
+            <a class="nav-link" href="{{url_for('.list_all_projects')}}">Show all projects</a>
+          </li>
+          <li class ="nav-item {%if active=='list_all_tasks'%}active {%endif%}">
+            <a class="nav-link" href="{{url_for('.list_all_tasks')}}">Show all milestones</a>
+          </li>
+          {%endif%}
+          {%if current_user.user_type==1 or current_user.user_type==2 or current_user.user_type==3%}
+          <li class ="nav-item {%if active=='list_projects'%}active {%endif%}">
+            <a class="nav-link" href="{{url_for('.list_projects')}}">Find Projects</a>
+          </li>
+          <li class ="nav-item {%if active=='my_projects'%}active {%endif%}">
+            <a class="nav-link" href="{{url_for('.my_projects')}}">My Projects</a>
+          </li>
+          {%endif%}
+
+        {%else%}
+        <li class ="nav-item {%if active=='login'%}active {%endif%}">
+          <a class="nav-link" href="{{url_for('.login', redirection_proj_id=0, redirection_task_id=0)}}">LogIn</a>
+        </li>
+
+        <li class ="nav-item {%if active=='find_task'%}active {%endif%}">
+          <a class="nav-link" href="{{url_for('.find_task')}}">Find tasks</a>
+        </li>
+
+        <li class ="nav-item {%if active=='register'%}active {%endif%}">
+          <a class="nav-link" href="{{url_for('.register')}}">SignUp</a>
+        </li>
+        {%endif%}
+
+      </ul>
+    </div>
+  </div>
+</nav>
+{%endblock%}
+
+{%block content%}
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 col-md-offset-1">
+
+
+        {%with messages=get_flashed_messages(with_categories=True)%}
+
+        {%if messages%}
+          {%for category,message in messages%}
+            {%if category=='error'%}
+            <div class="alert alert-danger" role="alert">
+              {{message}}
+            </div>
+            {%else%}
+            <div class="alert alert-success" role="alert">
+              {{message}}
+            </div>
+            {%endif%}
+          {%endfor%}
+        {%endif%}
+
+        {%endwith%}
+
+      </div>
+      {%block container%}
+
+      {%endblock%}
+
+    </div>
+
+  </div>
+{%endblock%}

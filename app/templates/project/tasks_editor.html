@@ -1,0 +1,133 @@
+{%extends 'layout.html'%}
+{%from 'helpers/_forms.html' import render_field%}
+
+{%block container%}
+
+<div class="col-md-12 col-md-offset-1">
+  <h3>Milestones</h3>
+  <div class="text-center">
+    <div class="btn-group" role="group" aria-label="Basic example">
+      {%if project.num_fases==1 or project.num_fases==2 or project.num_fases==3%}
+      <button type="button" class="btn btn-secondary"><a class="text-light" href="{{url_for('.tasks_editor', project_id=project.id, show_phase=1)}}">Phase 1</a></button>
+      {%endif%}
+      {%if project.num_fases==2 or project.num_fases==3%}
+      <button type="button" class="btn btn-secondary"><a class="text-light" href="{{url_for('.tasks_editor', project_id=project.id, show_phase=2)}}">Phase 2</a></button>
+      {%endif%}
+      {%if project.num_fases==3%}
+      <button type="button" class="btn btn-secondary"><a class="text-light" href="{{url_for('.tasks_editor', project_id=project.id, show_phase=3)}}">Phase 3</a></button>
+      {%endif%}
+    </div>
+</div>
+
+{%if show_phase=='1'%}
+<ul class="list-group list-group-flush">
+  <li class="list-group-item">Objectives phase 1:<pre>{{project.gen_obj_F1}}</pre></li>
+  <li class="list-group-item">% phase 1: {{project.work_percent_F1}}%</li>
+  <li class="list-group-item">% left phase 1: {{project.current_percent_F1}}%</li>
+</ul>
+{%endif%}
+
+{%if show_phase=='2'%}
+<ul class="list-group list-group-flush">
+  <li class="list-group-item">Objectives phase 2:<pre>{{project.gen_obj_F2}}</pre></li>
+  <li class="list-group-item">% phase 2: {{project.work_percent_F2}}%</li>
+  <li class="list-group-item">% left phase 2: {{project.current_percent_F2}}%</li>
+</ul>
+{%endif%}
+
+{%if show_phase=='3'%}
+<ul class="list-group list-group-flush">
+  <li class="list-group-item">Objectives phase 3:<pre>{{project.gen_obj_F3}}</pre></li>
+  <li class="list-group-item">% phase 3: {{project.work_percent_F3}}%</li>
+  <li class="list-group-item">% left phase 3: {{project.current_percent_F3}}%</li>
+
+</ul>
+{%endif%}
+
+</div>
+<table class="table">
+  <thead>
+    {%if tasks!=[]%}
+
+    <tr>
+      <th scope="col"></th>
+      <th scope="col">Title</th>
+      <th scope="col">Description</th>
+      <th scope="col">First_hab</th>
+      <th scope="col">% </th>
+      <th scope="col">Teoric finish</th>
+    </tr>
+    {%endif%}
+  </thead>
+  <tbody>
+    {%for task in tasks%}
+    <tr>
+        <td>
+                <div class="btn-group-vertical">
+
+                    {%if task[1].state == 2%}
+                      <div class="">
+                        <span class="badge badge-warning">Done</span>
+                      </div>
+                    {%endif%}
+
+                    {%if task[0]==1%}
+
+                      <a href="{{url_for('.get_task', task_id=task[1].id, project_id=project.id, show_phase=show_phase)}}" style="text-decoration:none"><pre class="text-primary">Manage milestone</pre></a>
+
+                      {%if task[0]<=3%}
+
+                      <a href="{{url_for('.create_task', project_id=project.id, show_phase=show_phase, concatenate_task_id=task[1].id)}}" style="text-decoration:none"><pre class="text-primary">Concatenate milestone</pre></a>
+                      {%endif%}
+                    {%elif task[0]==2%}
+
+                      <a href="{{url_for('.get_task', task_id=task[1].id, project_id=project.id, show_phase=show_phase)}}" style="text-decoration:none"><pre class="text-primary">       Manage milestone</pre></a>
+                      {%if task[0]<=3%}
+
+                        <a href="{{url_for('.create_task', project_id=project.id, show_phase=show_phase, concatenate_task_id=task[1].id)}}" style="text-decoration:none"><pre class="text-primary">       Concatenate milestone</pre></a>
+
+
+                      {%endif%}
+                      {%elif task[0]==3%}
+
+                        <a href="{{url_for('.get_task', task_id=task[1].id, project_id=project.id, show_phase=show_phase)}}" style="text-decoration:none"><pre class="text-primary">            Manage milestone</pre></a>
+                        {%if task[0]<=3%}
+
+                        <a href="{{url_for('.create_task', project_id=project.id, show_phase=show_phase, concatenate_task_id=task[1].id)}}" style="text-decoration:none"><pre class="text-primary">            Concatenate milestone</pre></a>
+                        {%endif%}
+                      {%elif task[0]==4%}
+
+                        <a href="{{url_for('.get_task', task_id=task[1].id, project_id=project.id, show_phase=show_phase)}}" style="text-decoration:none"><pre class="text-primary">                 See milestone</pre></a>
+                        {%if task[0]<=3%}
+
+                        <a href="{{url_for('.create_task', project_id=project.id, show_phase=show_phase, concatenate_task_id=task[1].id)}}" style="text-decoration:none"><pre class="text-primary">                 Concatenate milestone</pre></a>
+                        {%endif%}
+                      {%endif%}
+
+                </div>
+          </td>
+
+              <td>{{task[1].title}}</td>
+              <td>{{task[1].little_description}}</td>
+              <td>{{hab_dict[task[1].hability_1]}}</td>
+              <td>{{task[1].work}}</td>
+              {%if task[1].teoric_finish==None%}
+                <td>Not started</td>
+              {%else%}
+                <td>{{task[1].teoric_finish.day}}/{{task[1].teoric_finish.month}}/{{task[1].teoric_finish.year}}</td>
+            {%endif%}
+
+          </tr>
+
+
+
+
+    {%endfor%}
+  </tbody>
+
+
+</table>
+<div class="text-left">
+  <a href="{{url_for('.create_task', project_id= project.id, show_phase=show_phase, concatenate_task_id=0)}}" class="btn btn-primary">Create milestone</a>
+</div>
+{%endblock%}

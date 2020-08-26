@@ -1,0 +1,49 @@
+{%extends 'layout.html'%}
+
+{%block container%}
+
+<div class="col-md-12 col-md-offset-1">
+  <h3>Potential project managers</h3>
+</div>
+{%if potential_proj_manag_profiles==[]%}
+
+    <div class="alert alert-light" role="alert">
+        No potential project managers found
+    </div>
+
+{%else%}
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col">Last name</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {%for profile in potential_proj_manag_profiles%}
+          <tr>
+            <td>
+              <a href="{{url_for('.show_profile', username=profile.user.username, contract_id=0)}}">See profile</a>
+            </td>
+            <td>{{profile.name}}</td>
+            <td>{{profile.last_name}}</td>
+
+            <td>
+              <div class="text-center">
+                <div class="btn-group" role="group" aria-label="Basic example">
+                  <button type="button" class="btn btn-secondary"><a class="text-light" href="{{url_for('.select_project_manager', selection='accepted', user_id= profile.user_id)}}">Accept</a></button>
+                  <button type="button" class="btn btn-secondary"><a class="text-light" href="{{url_for('.select_project_manager', selection='declined', user_id= profile.user_id)}}">Decline</a></button>
+                </div>
+              </div>
+            </td>
+
+          </tr>
+      {%endfor%}
+    </tbody>
+  </table>
+{%endif%}
+
+
+{%endblock%}

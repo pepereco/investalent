@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <h2>Hola {{project_manager.username}}, el usuario {{user.username}} ha dado por finalizada la tarea: {{task.title}} i le ha evaluado. Confirma por favor la finalizacion de la tarea i evalue si esta acabada...</h2>
+    <div class="">
+
+      <a href="{{local_server}}/done_task/{{task.id}}/1" class="btn btn-primary">Si, esta acabado</a>
+
+      <a href="{{local_server}}/done_task/{{task.id}}/0" class="btn btn-primary">No</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,195 @@
+{%extends 'layout.html'%}
+{%from 'helpers/_forms.html' import render_field%}
+{%block title%}
+  {{title}}
+{%endblock%}
+
+{%block container%}
+<div class="w-100 p-3" style="background-color: #eee;"
+<div class="card">
+  <div class="card-body">
+      <h5 class="card-title">Title: {{task.title}}</h5>
+      <p class="card-text">Description: {{task.description}}</p>
+      <p class="card-text">Hability 1:{{first_hab}}</p>
+      <p class="card-text">Hability 2: {{second_hab}}</p>
+      <p class="card-text">Months: {{months}}</p>
+      <p class="card-text">Days: {{days}}</p>
+      {%if task.state == 1%}
+        <p class="card-text">Developer: {{task_devel.username}}
+          <div class="">
+            <a href="" data-toggle="modal" data-target="#contactModal"><p class="btn btn-primary" >Contact</p></a>
+          </div>
+        </p>
+        <div class="modal fade" id="contactModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Developer contact</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <pre>
+                  Name: {{task_devel.profile.name}} {{task_devel.profile.last_name}}
+                  email : {{task_devel.email}}
+                  telephone : {{task_devel.profile.telephone}}
+                </pre>
+
+              </div>
+              <div class="modal-footer">
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="">
+          <a href="" data-toggle="modal" data-target="#exampleModal"><p class="btn btn-danger" >Break contract</p></a>
+        </div>
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Breack the contract</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>
+                  I want to breack the contract with {{task_devel.profile.name}} {{task_devel.profile.last_name}}.
+                </p>
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"><a class="text-light" href="{{url_for('.leave_task', task_id=task.id)}}">Yes</a></button>
+                <button type="button" class="btn btn-primary"><a class="text-light" href="{{url_for('.get_task', task_id=task.id, project_id=project.id, show_phase=task.fase )}}">Cancel</a></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      {%else%}
+        <p class="card-text">Applicants:</p>
+        <div class="list-group">
+          {%for applicant in list_applicants%}
+            {%if applicant[1].state==0%}
+              <a href="{{url_for('.show_profile', username= applicant[0].username, contract_id=applicant[1].id)}}" class="list-group-item list-group-item-action"> {{applicant[0].profile.name}} {{applicant[0].profile.last_name}}
+
+              </a>
+              <div class="btn-group" role="group" aria-label="Basic example">
+                <button type="button" class="btn btn-primary"><a class="text-light" href="{{url_for('.select_applier', selection='accepted', contract_id= applicant[1].id)}}">Accept</a></button>
+                <button type="button" class="btn btn-secondary"><a class="text-light" href="{{url_for('.select_applier', selection='declined', contract_id= applicant[1].id)}}">Decline</a></button>
+              </div>
+            {%endif%}
+          {%endfor%}
+        </div>
+      {%endif%}
+
+      {%if task.recomend_username != '' %}
+        <p class="card-text">Recommended user: {{task.recomend_username}}</p>
+      {%endif%}
+      <p class="card-text">Commitment: {{task.commitment}}</p>
+      <p class="card-text">Work: {{task.work}}%</p>
+      <p class="card-text">Precedent milestone: {{precedent_task_title}}</p>
+  </div>
+  {%if current_user.is_authenticated and project.manager_user_id == current_user.id%}
+    {%if task.state==0 and list_applicants==[]%}
+      <a href="{{url_for('.edit_task', task_id= task.id, project_id=project.id, show_phase=show_phase)}}" class="btn btn-primary">Edit task</a>
+      <a href="{{url_for('.delete_task', task_id= task.id, project_id=project.id, show_phase=show_phase)}}" class="btn btn-danger">Delete task</a>
+    {%else%}
+      {%if task.state==1%}
+
+      <div class="">
+        <a href="" data-toggle="modal" data-target="#evalModal"><p class="btn btn-primary" >Finished and evaluate</p></a>
+      </div>
+        <div class="modal fade" id="evalModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Evaluate the work</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>
+                  Evaluate between 0 and 5 the work done.
+
+                  <form class=""  method="post">
+
+                    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+
+                    <div class="form-group">
+
+                      {{render_field(formEval.eval,class='form-control',placeholder='Evaluate the work: ',autofocus=true, required=true)}}
+
+                    </div>
+
+                    <button type="submit" class="btn btn-primary"  name="button">
+                      Evaluate and finish milestone
+                    </button>
+
+                  </form>
+                </p>
+
+              </div>
+              <div class="modal-footer">
+
+              </div>
+            </div>
+          </div>
+        </div>
+      {%else%}
+
+
+        <div class="">
+          <a href="" data-toggle="modal" data-target="#recommendModal"><p class="btn btn-secondary" >Recommend user</p></a>
+        </div>
+          <div class="modal fade" id="recommendModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Send a gmail recommendation</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <p>
+
+
+                    <form class=""  method="post">
+
+                      <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+
+                      <div class="form-group">
+
+                        {{render_field(formRecom.recomend_user,class='form-control',placeholder='Username',autofocus=true, required=true)}}
+
+                      </div>
+
+                      <button type="submit" class="btn btn-primary"  name="button">
+                        Send
+                      </button>
+
+                    </form>
+                  </p>
+
+                </div>
+                <div class="modal-footer">
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+    {%endif%}
+  {%endif%}
+{%endif%}
+</div>
+</div>
+{%endblock%}

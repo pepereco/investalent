@@ -1,0 +1,74 @@
+{%extends 'layout.html'%}
+
+{%block container%}
+<div class="w-100 p-3" style="background-color: #eee;"
+<div class="card">
+  <div class="">
+    <span class="badge badge-warning">COMERCIAL SECRET</span>
+  </div>
+  <div class="card-body">
+
+      <h5 class="card-title">Title: {{task.title}}</h5>
+      <pre class="card-text">Description: {{task.description}}</pre>
+      <pre class="card-text">Objectives: {{task.objectives}}</pre>
+      <p class="card-text">Hability 1:{{habilities_dict[task.hability_1]}}</p>
+      <p class="card-text">Hability 2: {{habilities_dict[task.hability_2]}}</p>
+      <p class="card-text">Months: {{months}}</p>
+      <p class="card-text">Days: {{days}}</p>
+      <p class="card-text">Commitment: {{task.commitment}}</p>
+      <p class="card-text">% : {{task_percent}}</p>
+      <p class="card-text">Project name : {{project.title}}</p>
+      <pre class="card-text">Project atractive description : {{project.atractive_description}}</pre>
+      <pre class="card-text">Project full description : {{project.description}}</pre>
+      <p class="card-text">Manager : {{project_manager_name}} {{project_manager_lastname}}</p>
+
+      <!--
+      {%if file_id!=None%}
+
+        <a href="{{url_for('.download', file_id=file_id)}}">Download presentation</a>
+
+      {%endif%}
+      -->
+      {%if task.state==0%}
+      <div class="">
+        <a href="" data-toggle="modal" data-target="#exampleModal"><p class="btn btn-primary" >Apply</p></a>
+      </div>
+
+      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Contract aplication</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              contract
+              .
+              .
+              .
+              .
+              .
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary"><a class="text-light" href="{{url_for('.apply_task', task_id=task.id, percent=task_percent, porcentajeProyecto=porcentajeProyecto, AccEmp=AccEmp, reserva=reserva)}}">Apply</a></button>
+              <button type="button" class="btn btn-secondary"><a class="text-light" href="{{url_for('.show_task', task_id=task.id)}}">Cancel</a></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {%endif%}
+      {%if current_user.user_type == 3%}
+        {%if task.hide==0%}
+          <button type="button" class="btn btn-secondary"><a class="text-light" href="{{url_for('.hide_task', task_id=task.id, hide =1)}}">Hide task</a></button>
+        {%else%}
+          <button type="button" class="btn btn-secondary"><a class="text-light" href="{{url_for('.hide_task', task_id=task.id, hide=0)}}">Reactivate task</a></button>
+        {%endif%}
+      {%endif%}
+
+
+</div>
+
+
+{%endblock%}

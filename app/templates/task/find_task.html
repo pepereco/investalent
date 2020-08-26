@@ -1,0 +1,64 @@
+{%extends 'layout.html'%}
+{%from 'helpers/_forms.html' import render_field%}
+
+{%block container%}
+
+<div class="col-md-12 col-md-offset-1">
+  <h3>Find your next milestone</h3>
+
+  <form class=""  method="post">
+
+    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+
+    <div class="form-group">
+
+      {{render_field(form.SelectTask,class='form-control',placeholder='Find: ',autofocus=true, required=true)}}
+
+    </div>
+
+    <button type="submit" class="btn btn-primary"  name="button">
+      Search
+    </button>
+  </form>
+
+</div>
+{%if list_tasks==[]%}
+
+    <div class="alert alert-light" role="alert">
+        No milestones found
+    </div>
+
+{%else%}
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col"></th>
+        <th scope="col">Title</th>
+        <th scope="col">Habilities</th>
+        <th scope ="col">Description</th>
+        <th scope ="col">%</th>
+      </tr>
+    </thead>
+    <tbody>
+      {%for tupla_task in list_tasks%}
+          <tr>
+            <td>
+              <a href="{{url_for('.show_task', task_id=tupla_task[0].id)}}">See milestone</a>
+            </td>
+            <td>{{tupla_task[0].title}}</td>
+            {%if habilities_dict[tupla_task[0].hability_2]=='None'%}
+              <td> {{habilities_dict[tupla_task[0].hability_1]}} </td>
+            {%else%}
+              <td>{{habilities_dict[tupla_task[0].hability_1]}} and {{habilities_dict[tupla_task[0].hability_2]}}</td>
+            {%endif%}
+            <td>{{tupla_task[0].little_description}}</td>
+            <td>{{tupla_task[1]}}</td>
+
+          </tr>
+      {%endfor%}
+    </tbody>
+  </table>
+{%endif%}
+
+
+{%endblock%}

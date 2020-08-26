@@ -1,0 +1,43 @@
+{%extends 'layout.html'%}
+{%from 'helpers/_forms.html' import render_field%}
+{%block container%}
+<div class="col-md-12 col-md-offset-1">
+  <h3>Edit profile</h3>
+  <form class=""  method="post">
+
+    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+
+    <div class="form-group">
+      {{render_field(form.name,class='form-control',placeholder='Name')}}
+    </div>
+
+    <div class="form-group">
+      {{render_field(form.last_name,class='form-control',placeholder='Lastname')}}
+    </div>
+
+    <div class="form-group">
+      {{render_field(form.first_hab, class='form-control',placeholder='Second hab')}}
+    </div>
+
+    <div class="form-group">
+      {{render_field(form.second_hab,class='form-control',placeholder='Second hab')}}
+    </div>
+
+    <div class="form-group">
+      {{render_field(form.third_hab,class='form-control',placeholder='Third hab')}}
+    </div>
+    <div class="form-group">
+      {{render_field(form.telephone,class='form-control',placeholder='telf')}}
+    </div>
+    <div class="form-group">
+      {{render_field(form.email,class='form-control',placeholder='telf')}}
+    </div>
+
+    <button type="submit" class="btn btn-primary"  name="button">
+      Edit profile
+    </button>
+
+  </form>
+
+</div>
+{%endblock%}

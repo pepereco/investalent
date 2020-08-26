@@ -1,0 +1,13 @@
+{%extends 'layout.html'%}
+{%from 'helpers/_forms.html' import render_field%}
+{%block container%}
+<form method="POST" action="{{url_for('.upload', project_id=project_id)}}" enctype="multipart/form-data">
+  <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+  <div class="form-group">
+
+    <label for="inputFile">File input</label>
+    <input type="file" name="inputFile" >
+  </div>
+  <button type="submit" class="btn btn-default" name="button">Submit</button>
+</form>
+{%endblock%}

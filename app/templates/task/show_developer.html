@@ -1,0 +1,158 @@
+{%extends 'layout.html'%}
+{%from 'helpers/_forms.html' import render_field%}
+{%block container%}
+<div class="w-100 p-3" style="background-color: #eee;"
+
+<div class="card">
+  <div class="">
+    <span class="badge badge-warning">COMERCIAL SECRET</span>
+  </div>
+  <div class="card-body">
+      <h5 class="card-title">Title: {{task.title}}</h5>
+      <p class="card-text">Description: {{task.description}}</p>
+      <p class="card-text">Objectives: {{task.objectives}}</p>
+      <p class="card-text">Hability 1:{{habilities_dict[task.hability_1]}}</p>
+      {%if habilities_dict[task.hability_2] != 'None'%}
+        <p class="card-text">Hability 2: {{habilities_dict[task.hability_2]}}</p>
+      {%endif%}
+      <p class="card-text">Limit date: {{task.teoric_finish.day}}/{{task.teoric_finish.month}}/{{task.teoric_finish.year}}</p>
+      <p class="card-text">Commitment: {{task.commitment}}</p>
+      <p class="card-text">Percent: {{task.percent}}%</p>
+
+  </div>
+  {%if task.state!=2%}
+
+  <div class="">
+    <a href="" data-toggle="modal" data-target="#modal1"><p class="btn btn-secondary" >Finish and evaluate</p></a>
+  </div>
+
+  <div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Congratulations for your work</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>
+            By accepting you ask the project manager
+            to give this task for finished.
+
+            Evaluate your project manager work please:
+
+            <form class=""  method="post">
+
+              <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+
+              <div class="form-group">
+
+                {{render_field(form.eval,class='form-control',placeholder='Evaluate the work: ',autofocus=true, required=true)}}
+
+              </div>
+
+              <button type="submit" class="btn btn-primary"  name="button">
+                Evaluate and finish milestone
+              </button>
+
+            </form>
+
+        </div>
+        <div class="modal-footer">
+          <div class="">
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {%endif%}
+
+
+  <div class="w-100 p-3" style="background-color: #eee;"
+    <div class="card" >
+      <div class="mb-5 bg-white">
+      <div class="card-body">
+        <h5 class="card-title">Project: {{project.title}}</h5>
+        <p class="card-text">CEO :{{profile_ceo.name}} {{profile_ceo.last_name}}</p>
+        <p class="card-text">Project manager :{{proj_manager.profile.name}} {{proj_manager.profile.last_name}}
+          <div class="text-right">
+          <a href="" data-toggle="modal" data-target="#exampleModal"><p class="btn btn-primary" >Contact</p></a>
+        </div>
+      </p>
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Project manager contact</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <pre>
+                  email : {{proj_manager.email}}
+                  telephone : {{proj_manager.profile.telephone}}
+                </pre>
+
+              </div>
+              <div class="modal-footer">
+
+              </div>
+            </div>
+        </div>
+    </div>
+
+        <p class="card-text">Atractive description:{{project.atractive_description}}</p>
+        <p class="card-text">Description:{{project.description}}</p>
+        <p class="card-text">Current phase:
+          {%if project.current_fase==0%}
+            <td>Not started</td>
+          {%endif%}
+          {%if project.current_fase==1%}
+            <td>1st phase</td>
+          {%endif%}
+          {%if project.current_fase==2%}
+            <td>2nd phase</td>
+          {%endif%}
+          {%if project.current_fase==3%}
+            <td>3th phase</td>
+          {%endif%}
+        </p>
+      </div>
+
+        {%if project.num_fases==1 or project.num_fases==2 or project.num_fases==3%}
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Objectives phase 1:<pre>{{project.gen_obj_F1}}</pre></li>
+        </ul>
+
+        {%endif%}
+
+
+        {%if project.num_fases==2 or project.num_fases==3%}
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Objectives phase 2:<pre>{{project.gen_obj_F2}}</pre></li>
+        </ul>
+        {%endif%}
+
+        {%if  project.num_fases==3 %}
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Objectives phase 3:<pre>{{project.gen_obj_F3}}</pre></li>
+        </ul>
+
+        {%endif%}
+
+        <div class=" bg-warning" style="width:150px">
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+
+</div>
+{%endblock%}
