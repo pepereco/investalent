@@ -16,6 +16,7 @@ def make_shell_context():
 
 
 if __name__=='__main__':
+    '''
     manager = Manager(app)
 
     manager.add_command('shell',Shell(make_context=make_shell_context) )
@@ -26,7 +27,5 @@ if __name__=='__main__':
         import unittest
         tests= unittest.TestLoader().discover('tests')
         unittest.TextTestRunner().run(tests)
-
-    app.run(port=5000, debug=False)
-
-    #manager.run()
+        '''
+    app.run()
